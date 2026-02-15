@@ -5,9 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zahrien Dimsum</title>
 
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
 <style>
 body {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Poppins', sans-serif;
   margin: 0;
   background: linear-gradient(135deg,#fff1f2,#ffe4e6);
 }
@@ -20,7 +23,8 @@ body {
 
 h1 {
   text-align: center;
-  font-size: 36px;
+  font-size: 38px;
+  font-family: 'Playfair Display', serif;
   animation: fadeDown 1s ease;
 }
 
@@ -28,6 +32,7 @@ h1 {
   text-align:center;
   margin-bottom:30px;
   opacity:0.8;
+  font-weight:300;
 }
 
 .menu {
@@ -63,6 +68,7 @@ button {
   cursor: pointer;
   font-weight: bold;
   transition: 0.3s ease;
+  font-family:'Poppins',sans-serif;
 }
 
 .btn-primary {
@@ -107,9 +113,20 @@ button {
 .note {
   margin-top:40px;
   background:#fff7ed;
-  padding:20px;
-  border-radius:15px;
-  font-size:14px;
+  padding:25px;
+  border-radius:20px;
+  font-size:15px;
+  text-align:center;
+  font-family:'Playfair Display',serif;
+  line-height:1.8;
+}
+
+.note span {
+  display:block;
+  font-family:'Poppins',sans-serif;
+  font-weight:500;
+  font-size:16px;
+  margin-top:8px;
 }
 
 @keyframes fadeDown {
@@ -141,153 +158,12 @@ button {
   </div>
 
   <div class="note">
-  💌 <b>note for cust!</b><br><br>
-  ʚ♡ɞ dibuat fresh saat order<br>
-  ʚ♡ɞ free saus & chili oil<br>
-  ʚ♡ɞ tanyakan kuota PO
+    💌 note for cust!<br>
+    <span>ʚ♡ɞ dibuat fresh saat order</span>
+    <span>ʚ♡ɞ free saus & chili oil</span>
+    <span>ʚ♡ɞ tanyakan kuota PO</span>
   </div>
 </div>
-
-<script>
-const phoneNumber = "6289523819093";
-
-const menuItems = [
-  {
-    id:1,
-    name:"ORIGINAL STEAM",
-    variants:[
-      {label:"4 pcs", price:13000},
-      {label:"6 pcs", price:19000},
-      {label:"8 pcs", price:25000}
-    ]
-  },
-  {
-    id:2,
-    name:"KEJU LUMER STEAM",
-    variants:[
-      {label:"4 pcs", price:15000},
-      {label:"6 pcs", price:22000},
-      {label:"8 pcs", price:28000}
-    ]
-  },
-  {
-    id:3,
-    name:"GORENG RENYAH",
-    variants:[
-      {label:"4 pcs", price:14000},
-      {label:"6 pcs", price:20000},
-      {label:"8 pcs", price:26000}
-    ]
-  },
-  {
-    id:4,
-    name:"KEJU LUMER GORENG",
-    variants:[
-      {label:"4 pcs", price:16000},
-      {label:"6 pcs", price:23000},
-      {label:"8 pcs", price:29000}
-    ]
-  }
-];
-
-let cart=[];
-
-function showNotification(msg){
-  const n=document.getElementById("notification");
-  n.innerText=msg;
-  n.style.display="block";
-  setTimeout(()=>n.style.display="none",2000);
-}
-
-function renderMenu(){
-  const container=document.getElementById("menu");
-  container.innerHTML="";
-
-  menuItems.forEach(item=>{
-    const card=document.createElement("div");
-    card.className="card";
-
-    let variantHTML="";
-    item.variants.forEach((v,i)=>{
-      variantHTML+=`
-      <div class="variant">
-        <span>${v.label}</span>
-        <span>Rp${v.price.toLocaleString("id-ID")}</span>
-      </div>
-      <button onclick="addToCart('${item.name}','${v.label}',${v.price})" class="btn-primary">Tambah ${v.label}</button>
-      `;
-    });
-
-    card.innerHTML=`<h3>𓆩♡𓆪 ${item.name}</h3>${variantHTML}`;
-    container.appendChild(card);
-  });
-}
-
-function addToCart(name,label,price){
-  const key=name+label;
-  const existing=cart.find(i=>i.key===key);
-
-  if(existing){ existing.qty++; }
-  else{ cart.push({key,name,label,price,qty:1}); }
-
-  showNotification(name+" "+label+" ditambahkan ✅");
-  renderCart();
-}
-
-function increaseQty(key){
-  const item=cart.find(i=>i.key===key);
-  if(item) item.qty++;
-  renderCart();
-}
-
-function decreaseQty(key){
-  const item=cart.find(i=>i.key===key);
-  if(!item) return;
-  item.qty--;
-  if(item.qty<=0){ cart=cart.filter(i=>i.key!==key); }
-  renderCart();
-}
-
-function renderCart(){
-  const container=document.getElementById("cartItems");
-  container.innerHTML="";
-
-  let totalItems=0;
-  let totalPrice=0;
-
-  cart.forEach(item=>{
-    totalItems+=item.qty;
-    totalPrice+=item.qty*item.price;
-
-    const div=document.createElement("div");
-    div.className="cart-item";
-    div.innerHTML=`
-      <span>${item.name} ${item.label} x${item.qty}</span>
-      <div>
-        <button onclick="decreaseQty('${item.key}')">➖</button>
-        <button onclick="increaseQty('${item.key}')">➕</button>
-      </div>`;
-
-    container.appendChild(div);
-  });
-
-  document.getElementById("totalItems").innerText=totalItems;
-  document.getElementById("totalPrice").innerText=totalPrice.toLocaleString("id-ID");
-}
-
-function sendToWhatsApp(){
-  if(cart.length===0) return;
-
-  let productList=cart.map(i=>`${i.name} ${i.label} x${i.qty}`).join(" + ");
-  let total=cart.reduce((s,i)=>s+i.qty*i.price,0);
-
-  let message=`Permisi Zahrien Dimsum, saya ingin membeli ${productList} dan totalnya Rp${total.toLocaleString("id-ID")}.`;
-
-  window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,'_blank');
-}
-
-renderMenu();
-</script>
 
 </body>
 </html>
