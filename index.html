@@ -1,34 +1,136 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zahrien Dimsum</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #fff7ed; }
-    .container { max-width: 1100px; margin: auto; padding: 20px; }
-    h1, h2 { text-align: center; }
-    .menu { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 20px; }
-    .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-    button { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; }
-    .btn-primary { background: #ea580c; color: white; }
-    .btn-success { background: #16a34a; color: white; width: 100%; margin-top: 10px; }
-    .cart { margin-top: 40px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-    .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .notification {
-      position: fixed; top: 20px; right: 20px;
-      background: #16a34a; color: white;
-      padding: 10px 15px; border-radius: 10px;
-      display: none;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zahrien Dimsum</title>
+
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  background: linear-gradient(135deg,#fff7ed,#ffe4c7);
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 40px;
+  animation: fadeDown 1s ease;
+}
+
+h2 { text-align: center; margin-top: 40px; }
+
+.menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  transform: translateY(0);
+  animation: fadeUp 0.8s ease forwards;
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+button {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(45deg,#ea580c,#f97316);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: scale(1.1);
+}
+
+.btn-success {
+  background: linear-gradient(45deg,#16a34a,#22c55e);
+  color: white;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.btn-success:hover {
+  transform: scale(1.05);
+}
+
+.cart {
+  margin-top: 50px;
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  animation: fadeUp 1s ease;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dashed #ddd;
+  animation: fadeUp 0.4s ease;
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(45deg,#16a34a,#22c55e);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 12px;
+  display: none;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  animation: slideIn 0.4s ease;
+}
+
+@keyframes fadeDown {
+  from { opacity:0; transform: translateY(-30px); }
+  to { opacity:1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(30px); }
+  to { opacity:1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity:0; transform: translateX(50px); }
+  to { opacity:1; transform: translateX(0); }
+}
+
+</style>
 </head>
 <body>
 
 <div class="notification" id="notification"></div>
 
 <div class="container">
-  <h1>Zahrien Dimsum</h1>
+  <h1>Zahrien Dimsum 🥟</h1>
   <p style="text-align:center">Menyediakan Dimsum lezat dan harga terjangkau.</p>
 
   <h2>Menu Favorit</h2>
@@ -49,7 +151,7 @@ const menuItems = [
   { id: 1, name: "Original Steam", price: 15000 },
   { id: 2, name: "Keju Lumer Steam", price: 12000 },
   { id: 3, name: "Goreng Renyah", price: 18000 },
-  { id: 3, name: "Keju Lumer Goreng", price: 18000 },
+  { id: 4, name: "Keju Lumer Goreng", price: 18000 }
 ];
 
 let cart = [];
@@ -150,7 +252,3 @@ renderMenu();
 
 </body>
 </html>
-
-
-
-
