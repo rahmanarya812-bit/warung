@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warung Nusantara</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #fff7ed; }
+    .container { max-width: 1100px; margin: auto; padding: 20px; }
+    h1, h2 { text-align: center; }
+    .menu { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 20px; }
+    .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    button { padding: 8px 12px; border: none; border-radius: 8px; cursor: pointer; }
+    .btn-primary { background: #ea580c; color: white; }
+    .btn-success { background: #16a34a; color: white; width: 100%; margin-top: 10px; }
+    .cart { margin-top: 40px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .notification {
+      position: fixed; top: 20px; right: 20px;
+      background: #16a34a; color: white;
+      padding: 10px 15px; border-radius: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="notification" id="notification"></div>
+
+<div class="container">
+  <h1>Warung Nusantara</h1>
+  <p style="text-align:center">Menyediakan makanan rumahan lezat dan harga terjangkau.</p>
+
+  <h2>Menu Favorit</h2>
+  <div class="menu" id="menu"></div>
+
+  <div class="cart">
+    <h2>Keranjang (<span id="totalItems">0</span>)</h2>
+    <div id="cartItems"></div>
+    <h3>Total: Rp<span id="totalPrice">0</span></h3>
+    <button class="btn-success" onclick="sendToWhatsApp()">Kirim Pesanan ke WhatsApp</button>
+  </div>
+</div>
+
+<script>
+const phoneNumber = "6285607492894";
+
+const menuItems = [
+  { id: 1, name: "Nasi Goreng", price: 15000 },
+  { id: 2, name: "Mie Ayam", price: 12000 },
+  { id: 3, name: "Ayam Geprek", price: 18000 }
+];
+
+let cart = [];
+
+function showNotification(message) {
+  const notif = document.getElementById("notification");
+  notif.innerText = message;
+  notif.style.display = "block";
+  setTimeout(() => notif.style.display = "none", 2000);
+}
+
+function renderMenu() {
+  const menuContainer = document.getElementById("menu");
+  menuContainer.innerHTML = "";
+  menuItems.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      <h3>${item.name}</h3>
+      <p>Rp${item.price.toLocaleString("id-ID")}</p>
+      <button class="btn-primary" onclick="addToCart(${item.id})">+ Tambah ke Keranjang</button>
+    `;
+    menuContainer.appendChild(div);
+  });
+}
+
+function addToCart(id) {
+  const item = menuItems.find(i => i.id === id);
+  const existing = cart.find(i => i.id === id);
+
+  if (existing) {
+    existing.qty++;
+  } else {
+    cart.push({ ...item, qty: 1 });
+  }
+
+  showNotification(item.name + " berhasil ditambahkan ✅");
+  renderCart();
+}
+
+function increaseQty(id) {
+  const item = cart.find(i => i.id === id);
+  if (item) item.qty++;
+  renderCart();
+}
+
+function decreaseQty(id) {
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  item.qty--;
+  if (item.qty <= 0) {
+    cart = cart.filter(i => i.id !== id);
+  }
+  renderCart();
+}
+
+function renderCart() {
+  const cartContainer = document.getElementById("cartItems");
+  cartContainer.innerHTML = "";
+
+  let totalItems = 0;
+  let totalPrice = 0;
+
+  cart.forEach(item => {
+    totalItems += item.qty;
+    totalPrice += item.qty * item.price;
+
+    const div = document.createElement("div");
+    div.className = "cart-item";
+    div.innerHTML = `
+      <span>${item.name} x${item.qty}</span>
+      <div>
+        <button onclick="decreaseQty(${item.id})">➖</button>
+        <button onclick="increaseQty(${item.id})">➕</button>
+      </div>
+    `;
+    cartContainer.appendChild(div);
+  });
+
+  document.getElementById("totalItems").innerText = totalItems;
+  document.getElementById("totalPrice").innerText = totalPrice.toLocaleString("id-ID");
+}
+
+function sendToWhatsApp() {
+  if (cart.length === 0) return;
+
+  let productList = cart.map(item => `${item.name} x${item.qty}`).join(" + ");
+  let total = cart.reduce((sum, item) => sum + item.qty * item.price, 0);
+
+  let message = `Halo Warung Nusantara, saya ingin membeli ${productList} dan totalnya adalah Rp${total.toLocaleString("id-ID")}.`;
+
+  let url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank");
+}
+
+renderMenu();
+</script>
+
+</body>
+</html>
