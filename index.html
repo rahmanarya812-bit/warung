@@ -54,8 +54,7 @@ body {
 }
 
 .card:hover {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  transform: translateY(-6px);
 }
 
 .menu-title {
@@ -70,20 +69,14 @@ body {
   font-size:14px;
 }
 
-.variant button {
+/* Tombol seperti biasa (default browser style) */
+.variant button,
+.cart-item button,
+.btn-success {
   margin-top:5px;
-  width:100%;
-  padding:8px;
-  border:none;
-  border-radius:10px;
-  background:linear-gradient(45deg,#ea580c,#f97316);
-  color:white;
+  padding:5px 10px;
+  border-radius:6px;
   cursor:pointer;
-  font-weight:600;
-}
-
-.variant button:hover{
-  transform:scale(1.05);
 }
 
 .cart {
@@ -103,24 +96,6 @@ body {
   border-bottom: 1px dashed #ddd;
 }
 
-.cart-item button{
-  padding:4px 8px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-.btn-success {
-  background: linear-gradient(45deg,#16a34a,#22c55e);
-  color: white;
-  width: 100%;
-  margin-top: 10px;
-  padding:10px;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-}
-
 .note {
   margin-top:40px;
   background:#fff1f2;
@@ -134,10 +109,10 @@ body {
   position: fixed;
   top: 20px;
   right: 20px;
-  background: linear-gradient(45deg,#16a34a,#22c55e);
+  background: #16a34a;
   color: white;
-  padding: 12px 18px;
-  border-radius: 12px;
+  padding: 10px 15px;
+  border-radius: 8px;
   display: none;
 }
 
@@ -234,7 +209,7 @@ function renderMenu(){
       html+=`
         <div class="variant">
           <span>⋆ ${v.label}</span>
-          <span>${v.price/1000}K</span>
+          <span>Rp${v.price.toLocaleString("id-ID")}</span>
         </div>
         <button onclick="addToCart('${item.name}','${v.label}',${v.price})">Tambah ${v.label}</button>
       `;
@@ -313,4 +288,3 @@ renderMenu();
 
 </body>
 </html>
-
