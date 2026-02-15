@@ -41,7 +41,7 @@ body {
 
 .menu {
   display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+  grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
   gap: 20px;
 }
 
@@ -51,7 +51,6 @@ body {
   border-radius: 20px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
   transition: all 0.3s ease;
-  animation: fadeUp 0.8s ease forwards;
 }
 
 .card:hover {
@@ -59,33 +58,32 @@ body {
   box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
 
-button {
-  padding: 10px 14px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.3s ease;
+.menu-title {
+  font-weight:700;
+  margin-bottom:10px;
 }
 
-.btn-primary {
-  background: linear-gradient(45deg,#ea580c,#f97316);
-  color: white;
+.variant {
+  display:flex;
+  justify-content:space-between;
+  margin:6px 0;
+  font-size:14px;
 }
 
-.btn-primary:hover {
-  transform: scale(1.08);
+.variant button {
+  margin-top:5px;
+  width:100%;
+  padding:8px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(45deg,#ea580c,#f97316);
+  color:white;
+  cursor:pointer;
+  font-weight:600;
 }
 
-.btn-success {
-  background: linear-gradient(45deg,#16a34a,#22c55e);
-  color: white;
-  width: 100%;
-  margin-top: 10px;
-}
-
-.btn-success:hover {
-  transform: scale(1.05);
+.variant button:hover{
+  transform:scale(1.05);
 }
 
 .cart {
@@ -94,28 +92,33 @@ button {
   padding: 25px;
   border-radius: 20px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  animation: fadeUp 1s ease;
 }
 
 .cart-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
-  padding: 8px 0;
+  margin-bottom: 10px;
+  padding: 6px 0;
   border-bottom: 1px dashed #ddd;
 }
 
-.notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
+.cart-item button{
+  padding:4px 8px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.btn-success {
   background: linear-gradient(45deg,#16a34a,#22c55e);
   color: white;
-  padding: 12px 18px;
-  border-radius: 12px;
-  display: none;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  width: 100%;
+  margin-top: 10px;
+  padding:10px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
 }
 
 .note {
@@ -127,9 +130,15 @@ button {
   line-height:1.8;
 }
 
-@keyframes fadeUp {
-  from { opacity:0; transform: translateY(20px);} 
-  to { opacity:1; transform: translateY(0);} 
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(45deg,#16a34a,#22c55e);
+  color: white;
+  padding: 12px 18px;
+  border-radius: 12px;
+  display: none;
 }
 
 </style>
@@ -167,105 +176,136 @@ button {
 <script>
 const phoneNumber = "6289523819093";
 
-// Harga default menampilkan varian 4 pcs
 const menuItems = [
-  { id: 1, name: "𓆩♡𓆪 ORIGINAL STEAM (4 pcs)", price: 13000 },
-  { id: 2, name: "𓆩♡𓆪 KEJU LUMER STEAM (4 pcs)", price: 15000 },
-  { id: 3, name: "𓆩♡𓆪 GORENG RENYAH (4 pcs)", price: 14000 },
-  { id: 4, name: "𓆩♡𓆪 KEJU LUMER GORENG (4 pcs)", price: 16000 }
+  {
+    name: "𓆩♡𓆪 ORIGINAL STEAM",
+    variants: [
+      { label: "4 pcs", price: 13000 },
+      { label: "6 pcs", price: 19000 },
+      { label: "8 pcs", price: 25000 }
+    ]
+  },
+  {
+    name: "𓆩♡𓆪 KEJU LUMER STEAM",
+    variants: [
+      { label: "4 pcs", price: 15000 },
+      { label: "6 pcs", price: 22000 },
+      { label: "8 pcs", price: 28000 }
+    ]
+  },
+  {
+    name: "𓆩♡𓆪 GORENG RENYAH",
+    variants: [
+      { label: "4 pcs", price: 14000 },
+      { label: "6 pcs", price: 20000 },
+      { label: "8 pcs", price: 26000 }
+    ]
+  },
+  {
+    name: "𓆩♡𓆪 KEJU LUMER GORENG",
+    variants: [
+      { label: "4 pcs", price: 16000 },
+      { label: "6 pcs", price: 23000 },
+      { label: "8 pcs", price: 29000 }
+    ]
+  }
 ];
 
 let cart = [];
 
-function showNotification(message) {
-  const notif = document.getElementById("notification");
-  notif.innerText = message;
-  notif.style.display = "block";
-  setTimeout(() => notif.style.display = "none", 2000);
+function showNotification(msg){
+  const n=document.getElementById("notification");
+  n.innerText=msg;
+  n.style.display="block";
+  setTimeout(()=>n.style.display="none",2000);
 }
 
-function renderMenu() {
-  const menuContainer = document.getElementById("menu");
-  menuContainer.innerHTML = "";
-  menuItems.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `
-      <h3>${item.name}</h3>
-      <p>Rp${item.price.toLocaleString("id-ID")}</p>
-      <button class="btn-primary" onclick="addToCart(${item.id})">+ Tambah ke Keranjang</button>
-    `;
-    menuContainer.appendChild(div);
+function renderMenu(){
+  const container=document.getElementById("menu");
+  container.innerHTML="";
+
+  menuItems.forEach(item=>{
+    const card=document.createElement("div");
+    card.className="card";
+
+    let html=`<div class="menu-title">${item.name}</div>`;
+
+    item.variants.forEach(v=>{
+      html+=`
+        <div class="variant">
+          <span>⋆ ${v.label}</span>
+          <span>${v.price/1000}K</span>
+        </div>
+        <button onclick="addToCart('${item.name}','${v.label}',${v.price})">Tambah ${v.label}</button>
+      `;
+    });
+
+    card.innerHTML=html;
+    container.appendChild(card);
   });
 }
 
-function addToCart(id) {
-  const item = menuItems.find(i => i.id === id);
-  const existing = cart.find(i => i.id === id);
+function addToCart(name,label,price){
+  const key=name+label;
+  const existing=cart.find(i=>i.key===key);
 
-  if (existing) {
-    existing.qty++;
-  } else {
-    cart.push({ ...item, qty: 1 });
-  }
+  if(existing){ existing.qty++; }
+  else{ cart.push({key,name,label,price,qty:1}); }
 
-  showNotification(item.name + " berhasil ditambahkan ✅");
+  showNotification(name+" "+label+" ditambahkan ✅");
   renderCart();
 }
 
-function increaseQty(id) {
-  const item = cart.find(i => i.id === id);
-  if (item) item.qty++;
+function increaseQty(key){
+  const item=cart.find(i=>i.key===key);
+  if(item) item.qty++;
   renderCart();
 }
 
-function decreaseQty(id) {
-  const item = cart.find(i => i.id === id);
-  if (!item) return;
+function decreaseQty(key){
+  const item=cart.find(i=>i.key===key);
+  if(!item) return;
   item.qty--;
-  if (item.qty <= 0) {
-    cart = cart.filter(i => i.id !== id);
-  }
+  if(item.qty<=0){ cart=cart.filter(i=>i.key!==key); }
   renderCart();
 }
 
-function renderCart() {
-  const cartContainer = document.getElementById("cartItems");
-  cartContainer.innerHTML = "";
+function renderCart(){
+  const container=document.getElementById("cartItems");
+  container.innerHTML="";
 
-  let totalItems = 0;
-  let totalPrice = 0;
+  let totalItems=0;
+  let totalPrice=0;
 
-  cart.forEach(item => {
-    totalItems += item.qty;
-    totalPrice += item.qty * item.price;
+  cart.forEach(item=>{
+    totalItems+=item.qty;
+    totalPrice+=item.qty*item.price;
 
-    const div = document.createElement("div");
-    div.className = "cart-item";
-    div.innerHTML = `
-      <span>${item.name} x${item.qty}</span>
+    const div=document.createElement("div");
+    div.className="cart-item";
+    div.innerHTML=`
+      <span>${item.name} ${item.label} x${item.qty}</span>
       <div>
-        <button onclick="decreaseQty(${item.id})">➖</button>
-        <button onclick="increaseQty(${item.id})">➕</button>
-      </div>
-    `;
-    cartContainer.appendChild(div);
+        <button onclick="decreaseQty('${item.key}')">➖</button>
+        <button onclick="increaseQty('${item.key}')">➕</button>
+      </div>`;
+
+    container.appendChild(div);
   });
 
-  document.getElementById("totalItems").innerText = totalItems;
-  document.getElementById("totalPrice").innerText = totalPrice.toLocaleString("id-ID");
+  document.getElementById("totalItems").innerText=totalItems;
+  document.getElementById("totalPrice").innerText=totalPrice.toLocaleString("id-ID");
 }
 
-function sendToWhatsApp() {
-  if (cart.length === 0) return;
+function sendToWhatsApp(){
+  if(cart.length===0) return;
 
-  let productList = cart.map(item => `${item.name} x${item.qty}`).join(" + ");
-  let total = cart.reduce((sum, item) => sum + item.qty * item.price, 0);
+  let productList=cart.map(i=>`${i.name} ${i.label} x${i.qty}`).join(" + ");
+  let total=cart.reduce((s,i)=>s+i.qty*i.price,0);
 
-  let message = `Permisi Zahrien Dimsum, saya ingin membeli ${productList} dan totalnya adalah Rp${total.toLocaleString("id-ID")}.`;
+  let message=`Permisi Zahrien Dimsum, saya ingin membeli ${productList} dan totalnya adalah Rp${total.toLocaleString("id-ID")}.`;
 
-  let url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-  window.open(url, "_blank");
+  window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,'_blank');
 }
 
 renderMenu();
