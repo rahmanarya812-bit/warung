@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zahrien Dimsum</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 body {
@@ -22,15 +22,15 @@ body {
 
 .pricelist-title {
   text-align:center;
-  font-family:'Playfair Display',serif;
   font-size:26px;
-  line-height:1.6;
+  font-weight:700;
 }
 
 .pricelist-sub {
   text-align:center;
   font-size:14px;
   opacity:0.8;
+  margin-bottom:10px;
 }
 
 .gemoy {
@@ -42,49 +42,51 @@ body {
 .menu {
   display: grid;
   grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
-  gap: 20px;
+  gap: 25px;
 }
 
 .card {
-  background: white;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-6px);
+  background: #f3f3f3;
+  padding: 25px;
+  border-radius: 30px;
 }
 
 .menu-title {
   font-weight:700;
-  margin-bottom:10px;
+  margin-bottom:15px;
+  font-size:18px;
 }
 
 .variant {
   display:flex;
   justify-content:space-between;
-  margin:6px 0;
-  font-size:14px;
+  margin:8px 0;
+  font-size:15px;
 }
 
-/* Tombol seperti biasa (default browser style) */
-.variant button,
-.cart-item button,
-.btn-success {
-  margin-top:5px;
-  padding:5px 10px;
-  border-radius:6px;
+/* Tombol style seperti gambar */
+.variant button {
+  width:100%;
+  margin-top:8px;
+  padding:12px;
+  border:none;
+  border-radius:30px;
+  background:#f97316;
+  color:white;
+  font-weight:600;
+  font-size:16px;
   cursor:pointer;
 }
 
+.variant button:hover{
+  opacity:0.9;
+}
+
 .cart {
-  margin-top: 50px;
+  margin-top: 60px;
   background: white;
   padding: 25px;
   border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
 .cart-item {
@@ -96,13 +98,24 @@ body {
   border-bottom: 1px dashed #ddd;
 }
 
-.note {
-  margin-top:40px;
-  background:#fff1f2;
-  padding:20px;
-  border-radius:15px;
-  font-size:14px;
-  line-height:1.8;
+.cart-item button{
+  padding:4px 8px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.btn-success {
+  background: #f97316;
+  color: white;
+  width: 100%;
+  margin-top: 10px;
+  padding:12px;
+  border:none;
+  border-radius:30px;
+  font-weight:600;
+  font-size:16px;
+  cursor:pointer;
 }
 
 .notification {
@@ -114,6 +127,15 @@ body {
   padding: 10px 15px;
   border-radius: 8px;
   display: none;
+}
+
+.note {
+  margin-top:40px;
+  background:#fff1f2;
+  padding:20px;
+  border-radius:15px;
+  font-size:14px;
+  line-height:1.8;
 }
 
 </style>
@@ -136,7 +158,7 @@ body {
   <h2>Keranjang (<span id="totalItems">0</span>)</h2>
   <div id="cartItems"></div>
   <h3>Total: Rp<span id="totalPrice">0</span></h3>
-  <button class="btn-success" onclick="sendToWhatsApp()">Kirim Pesanan ke WhatsApp</button>
+  <button class="btn-success" onclick="sendToWhatsApp()">+ Tambah ke Keranjang</button>
 </div>
 
 <div class="note">
@@ -211,7 +233,7 @@ function renderMenu(){
           <span>⋆ ${v.label}</span>
           <span>Rp${v.price.toLocaleString("id-ID")}</span>
         </div>
-        <button onclick="addToCart('${item.name}','${v.label}',${v.price})">Tambah ${v.label}</button>
+        <button onclick="addToCart('${item.name}','${v.label}',${v.price})">+ Tambah ke Keranjang</button>
       `;
     });
 
